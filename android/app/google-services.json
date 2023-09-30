@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "603149791684",
+    "project_id": "testlilac",
+    "storage_bucket": "testlilac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603149791684:android:7648325fe96ba893133491",
+        "android_client_info": {
+          "package_name": "com.example.machine_test_lilac"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQTEaJoBzGw-QUaweD8zLAxUS3Ox0lkhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
