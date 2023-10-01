@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:machine_test_lilac/Offline_downloads/offline_video_display.dart';
 
 class OfflineDownloads extends StatefulWidget with WidgetsBindingObserver {
   const OfflineDownloads({
@@ -140,7 +141,13 @@ class _OfflineDownloadsState extends State<OfflineDownloads> {
                       }
 
                       return GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const OfflineVideoDisplay()),
+                          );
+                        },
                         child: Card(
                           color: Colors.white,
                           elevation: 10,
