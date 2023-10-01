@@ -1,11 +1,20 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'login_screen.dart';
 
 class ProfileDisplayPage extends StatefulWidget {
-  final String name,email,dob,imageurl;
-  const ProfileDisplayPage({Key? key, required this.name, required this.email, required this.dob, required this. imageurl, }) : super(key: key);
+  final String name, email, dob, imageurl;
+
+  const ProfileDisplayPage({
+    Key? key,
+    required this.name,
+    required this.email,
+    required this.dob,
+    required this.imageurl,
+  }) : super(key: key);
 
   @override
   State<ProfileDisplayPage> createState() => _ProfileDisplayPageState();
@@ -17,13 +26,11 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController dateinput = TextEditingController();
 
-
-
   @override
   void initState() {
     dateinput.text = widget.dob;
-    namecontroller.text=widget.name;
-    emailcontroller.text=widget.email;
+    namecontroller.text = widget.name;
+    emailcontroller.text = widget.email;
     super.initState();
   }
 
@@ -46,7 +53,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                       width: 100,
                       height: 100,
                       child: CircleAvatar(
-
+                        backgroundColor: Colors.green,
                         radius: 43,
                         child: Image.network(widget.imageurl),
                       ),
@@ -56,7 +63,6 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                       child: TextFormField(
                         controller: namecontroller,
                         readOnly: true,
-
                         decoration: const InputDecoration(
                             hintText: 'Enter first Name',
                             labelText: 'Name',
@@ -68,7 +74,7 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.red),
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(9.0)))),
+                                    BorderRadius.all(Radius.circular(9.0)))),
                       ),
                     ),
                     Padding(
@@ -76,7 +82,6 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                       child: TextFormField(
                         controller: emailcontroller,
                         readOnly: true,
-
                         decoration: const InputDecoration(
                             hintText: 'Email',
                             labelText: 'Email',
@@ -88,17 +93,14 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.red),
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(9.0)))),
+                                    BorderRadius.all(Radius.circular(9.0)))),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-
-
                         controller: dateinput,
                         readOnly: true,
-
                         decoration: const InputDecoration(
                             hintText: 'Enter dob',
                             labelText: 'DOB',
@@ -109,18 +111,39 @@ class _ProfileDisplayPageState extends State<ProfileDisplayPage> {
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.red),
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(9)))),
+                                    BorderRadius.all(Radius.circular(9)))),
                       ),
                     ),
+                    Center(
+                        child: Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        child: ElevatedButton(
+                          child: const Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          ),
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
+                            SharedPreferences pref =
+                                await SharedPreferences.getInstance();
+                            pref.clear();
 
+                            if (!mounted) return;
 
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginScreen()),
+                                (Route<dynamic> route) => false);
+                          },
+                        ),
+                      ),
+                    )),
                   ],
                 )),
           ),
         ));
   }
-
-
-
-
 }

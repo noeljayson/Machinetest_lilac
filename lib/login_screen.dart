@@ -7,6 +7,7 @@ import 'package:machine_test_lilac/home_screen.dart';
 import 'package:machine_test_lilac/otp.dart';
 import 'package:machine_test_lilac/register_page.dart';
 import 'package:machine_test_lilac/widgets/loading_widget.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -28,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   bool _isValid = false;
-
   @override
   void initState() {
     super.initState();
@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final overlay = LoadingOverlay.of(context);
     var screenSize = MediaQuery.of(context).size;
 
@@ -193,6 +194,8 @@ class _LoginScreenState extends State<LoginScreen> {
           )),
     );
   }
+
+
 }
 
 

@@ -49,9 +49,8 @@ dependencies:
   pinput:
   firebase_storage:
   path_provider: ^2.0.4
-
-
-
+  encrypt:
+  http:
   auto_orientation:
   native_device_orientation:
   wakelock: ^0.6.2

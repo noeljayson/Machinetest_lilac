@@ -79,7 +79,7 @@ class _AddDetailPageState extends State<AddDetailPage> {
                             width: 100,
                             height: 100,
                             child: CircleAvatar(
-
+                              backgroundColor: Colors.green,
                               radius: 43,
                               child: Image.network(imageUrl),
                             ),

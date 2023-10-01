@@ -58,6 +58,7 @@ class _OfflineDownloadsState extends State<OfflineDownloads> {
         setState(() {
           print("newcompleted");
           print(element['status'] == const DownloadTaskStatus(3));
+          Fluttertoast.showToast(msg: "File download completed");
         });
       });
     });

@@ -17,15 +17,18 @@ import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:encrypt/encrypt.dart' as enc;
 
 class VideoPlayerBothWidget extends StatefulWidget {
   VideoPlayerController controller;
   List<dynamic> vidlist;
-  bool initclicked;
+
 
   VideoPlayerBothWidget({
     Key? key,
-    required this.controller,required this.vidlist, required this.initclicked,
+    required this.controller,required this.vidlist,
   }) : super(key: key);
 
   @override
@@ -52,7 +55,7 @@ class _VideoPlayerBothWidgetState extends State<VideoPlayerBothWidget> {
   String currentposition = "";
   bool ispaused = false;
   int currentvideoposition = 0;
-  bool isclicked=false;
+
 
   @override
   void initState() {
@@ -200,9 +203,7 @@ class _VideoPlayerBothWidgetState extends State<VideoPlayerBothWidget> {
                         InkWell(
                           onTap:(){
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => HomeScreen(vidlist:widget.vidlist.first.toString())));
-setState(() {
-  isclicked=false;
-});
+
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -223,17 +224,21 @@ setState(() {
                           ),
                         ),
                         InkWell(
-                          onTap: (){
-                            if(widget.initclicked==false){
-                              requestDownload(widget.vidlist.first, "video1",);
+                          onTap: ()async{
+                            Directory? d = await getExternalStorageDirectory();
 
-                            }
-                            else if(isclicked==false){
                               requestDownload(widget.vidlist.first, "video1",);
-                            }
-                            else{
-                              requestDownload(widget.vidlist.last, "video1",);
-                            }
+                              var resp = await http.get(Uri.parse(widget.vidlist.first.toString()));
+
+                              var encResult = _encryptData(resp.bodyBytes);
+                              String p = await _writeData(encResult, '${d!.path}/video1.aes');
+                              Fluttertoast.showToast(msg: "file encrypted successfully");
+                            Fluttertoast.showToast(msg: "file downloaded successfully");
+                              print("file encrypted successfully: $p");
+
+
+
+
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -245,10 +250,10 @@ setState(() {
                                 ),
                                 borderRadius: const BorderRadius.all(Radius.circular(15))
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
                               child: Row(
-                                children: const [
+                                children: [
                                   Icon(
                                       Icons.arrow_drop_down,
                                       color: Colors.green,
@@ -263,9 +268,7 @@ setState(() {
                         InkWell(
                           onTap: (){
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => HomeScreen(vidlist:widget.vidlist.last.toString())));
-                            setState(() {
-                              isclicked=true;
-                            });
+
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -287,7 +290,7 @@ setState(() {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             )
@@ -383,4 +386,37 @@ setState(() {
   void getcallback() {
     FlutterDownloader.registerCallback(downloadCallback);
   }
+  _encryptData(plainString) {
+    print("Encrypting File...");
+    final encrypted =
+    MyEncrypt.myEncrypter.encryptBytes(plainString, iv: MyEncrypt.myIv);
+    return encrypted.bytes;
+  }
+
+  _decryptData(encData) {
+    print("File decryption in progress...");
+    enc.Encrypted en = new enc.Encrypted(encData);
+    return MyEncrypt.myEncrypter.decryptBytes(en, iv: MyEncrypt.myIv);
+  }
+
+  Future<Uint8List> _readData(fileNameWithPath) async {
+    print("Reading data...");
+    File f = File(fileNameWithPath);
+    return await f.readAsBytes();
+  }
+
+  Future<String> _writeData(dataToWrite, fileNameWithPath) async {
+    print("Writting Data...");
+    File f = File(fileNameWithPath);
+    await f.writeAsBytes(dataToWrite);
+    return f.absolute.toString();
+  }
+
+
+}
+
+class MyEncrypt {
+  static final myKey = enc.Key.fromUtf8('TechWithVPTechWithVPTechWithVP12');
+  static final myIv = enc.IV.fromUtf8("VivekPanchal1122");
+  static final myEncrypter = enc.Encrypter(enc.AES(myKey));
 }

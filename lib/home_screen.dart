@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         floatingActionButton:  FloatingActionButton(
           backgroundColor: Colors.green,
-          onPressed: () {  Navigator.of(context).push(MaterialPageRoute(builder: (context) => OfflineDownloads()));
+          onPressed: () {  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OfflineDownloads()));
           },
           child: const Icon(Icons.download_for_offline),
         ),
@@ -50,15 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
         body: VideoPlayerBothWidget(
           controller: controller,
           vidlist:vidurls,
-          initclicked:false,
+
         ),
       ),
     );
   }
 
   void loadVideoPlayer() {
-    print(widget.vidlist);
-    print("raju");
+
     controller = VideoPlayerController.networkUrl(Uri.parse(widget.vidlist.isEmpty?vidurls.first:widget.vidlist.toString()));
 
     controller.addListener(() {

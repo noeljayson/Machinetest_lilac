@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:machine_test_lilac/home_screen.dart';
 import 'package:machine_test_lilac/login_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
+  bool _isGranted = true;
 
   @override
   void initState() {
@@ -26,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    requestStoragePermission();
     return const Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -57,5 +59,20 @@ class _SplashScreenState extends State<SplashScreen> {
           }
 
         });
+  }
+
+  requestStoragePermission() async {
+    if (!await Permission.storage.isGranted) {
+      PermissionStatus result = await Permission.storage.request();
+      if (result.isGranted) {
+        setState(() {
+          _isGranted = true;
+        });
+      } else {
+        setState(() {
+          _isGranted = false;
+        });
+      }
+    }
   }
 }

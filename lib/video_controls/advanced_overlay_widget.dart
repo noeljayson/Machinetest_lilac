@@ -162,7 +162,7 @@ class _AdvancedOverlayWidgetState extends State<AdvancedOverlayWidget> {
                   child:  CircleAvatar(
                     radius: 20.0,
                     backgroundImage: NetworkImage(imageurl),
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.green,
                   ),
                 )),
             widget.controller.value.isPlaying && istapped == true
